@@ -10,42 +10,57 @@ class Test
 {
     public static void main(String[] args) throws FindFailed, InterruptedException
     {
-        //Settings.MoveMouseDelay = 0;
+        Settings.MoveMouseDelay = 0;
         Debug.setDebugLevel(3);
         Screen s = new Screen();
 
-        String file = s.userCapture().getFile();
+        // Open up the browser
+        App.open("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe");
+
+        // Wait for the browser to load up
+        // s.wait(Patterns.Google, 60);
+        // Google is different today to tell people to vote. 
+        // So just sleeping should be fine
         Thread.sleep(2000);
-        s.click(file);
-        s.text();
 
-        //// Open up the browser
-        //App.open("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe");
+        // Open up the tacobell site
+        s.type("l", KeyModifier.CTRL);
+        s.type("tacobell.com");
+        s.type(Key.ENTER);
 
-        //// Wait for the browser to load up
-        //// s.wait(Patterns.Google, 60);
-        //// Google is different today to tell people to vote. 
-        //// So just sleeping should be find
-        //Thread.sleep(2000);
+        List<MenuItem> menuItems = new ArrayList<MenuItem>();
+        menuItems.add(MenuItem.CheezyPotatoGriller);
+        menuItems.add(MenuItem.FiveLayerBurrito);
+        menuItems.add(MenuItem.SoftTaco);
+        menuItems.add(MenuItem.CheezyPotatoGriller);
 
-        //// Open up the tacobell site
-        //s.type("l", KeyModifier.CTRL);
-        //s.type("tacobell.com");
-        //s.type(Key.ENTER);
+        for(MenuItem item : menuItems)
+        {
+            item.addToCart(s);
+        }
 
-        //List<MenuItem> menuItems = new ArrayList<MenuItem>();
-        //menuItems.add(MenuItem.CheezyPotatoGriller);
-        //menuItems.add(MenuItem.FiveLayerBurrito);
-        //menuItems.add(MenuItem.SoftTaco);
-        //menuItems.add(MenuItem.CheezyPotatoGriller);
+        // Calculate the cart total from the menu items
+        double total = menuItems.stream().map(MenuItem::getCost).reduce(0d, (a,b) -> a+b);
 
-        //for(MenuItem item : menuItems)
-        //{
-            //item.addToCart(s);
-        //}
+        // Find the cart in the top right of the screen and extract the cart total from it
+        Region right = s.wait(Patterns.Cart, 60).right();
+        right.highlight(2);
+        // Get the cart total from the screen
+        double cartTotal = Double.parseDouble(right.text().substring(1)); 
 
-        //Utils.waitAndClick(s, Patterns.Cart);
-        //double total = menuItems.stream().map(MenuItem::getCost).reduce(0d, (a,b) -> a+b);
-        //s.findText("Order Total").highlight(2);
+        if(total != cartTotal)
+        {
+            System.out.printf("Cart total doesn't match calculated total: %f != %f\n", total, cartTotal);
+            return;
+        }
+        else
+        {
+            System.out.printf("Cart total matches calculated total: %f == %f\n", total, cartTotal);
+        }
+
+        Utils.clearCart(s);
+
+        // Go back to the home screen
+        Utils.waitAndClick(s, Patterns.Logo);
     }
 }

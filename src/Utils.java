@@ -23,14 +23,15 @@ public class Utils
         	s.type(Key.DOWN);
         }
 
-        return s.getLastMatch();
+        return s.find(pattern);
     }
-
-    // Find a menu item and click on it
-    public static <PS> void addToCart(Screen s, PS pattern) throws FindFailed
+        
+    public static <PS> void clearCart(Screen s) throws FindFailed
     {
-        Match match = scrollToFind(s, pattern);
-        match.highlight(1);
-        match.click(Patterns.AddToOrder);
+        s.click(Patterns.Cart);
+        while(s.exists(Patterns.Hungry) == null)
+        {
+            waitAndClick(s, Patterns.RemoveFromCart);
+        }
     }
 }

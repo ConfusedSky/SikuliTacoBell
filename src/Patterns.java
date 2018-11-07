@@ -6,7 +6,7 @@ public class Patterns
     {
         public static final Pattern FiveLayer = new Pattern("imgs/5Layer.PNG").exact();
         public static final Pattern CheezyPotatoGriller = new Pattern("imgs/CheezyPotatoGriller.png").exact();
-        public static final Pattern SoftTaco = new Pattern("imgs/SoftTaco.png");
+        public static final Pattern SoftTaco = new Pattern("imgs/SoftTaco.png").exact();
     }
 
     public static final Pattern AddAnother = new Pattern("imgs/AddAnother.PNG");
@@ -17,4 +17,7 @@ public class Patterns
     public static final Pattern Google = new Pattern("imgs/Google.png");
     public static final Pattern X = new Pattern("imgs/x.png");
     public static final Pattern Cart = new Pattern("imgs/Cart.png");
+    public static final Pattern Hungry = new Pattern("imgs/Hungry.png");
+    public static final Pattern RemoveFromCart = new Pattern("imgs/RemoveFromCart.png");
+    public static final Pattern Logo = new Pattern("imgs/Logo.png");
 }

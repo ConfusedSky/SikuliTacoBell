@@ -43,8 +43,12 @@ public class MenuItem
             Utils.waitAndClick(s, category.getPattern());
             prevCategory = category;
         }
-        Utils.addToCart(s, pattern);
-        // Close the cart
+
+        Match match = Utils.scrollToFind(s, pattern);
+        match.highlight(1);
+        match.click(Patterns.AddToOrder);
+
+        // Close the cart because it can get in the way of detections
         Utils.waitAndClick(s, Patterns.X);
         // Sleep to prevent the adding to cart from getting in the way of the next movement
         Thread.sleep(2000);
